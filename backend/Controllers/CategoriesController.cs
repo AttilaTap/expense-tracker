@@ -52,7 +52,16 @@ namespace ExpenseTracker.Controllers
                 return NotFound();
             }
 
+            // First delete transactions linked to this category
+            var relatedTransactions = await _context.Transactions
+                .Where(t => t.CategoryId == id)
+                .ToListAsync();
+
+            _context.Transactions.RemoveRange(relatedTransactions);
+
+            // Now delete the category
             _context.Categories.Remove(category);
+
             await _context.SaveChangesAsync();
 
             return NoContent();

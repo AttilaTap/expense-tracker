@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "./axiosInstance";
+import axios from "../axiosInstance";
 
 function CreateTransaction({ onTransactionCreated, refresh }) {
   const [description, setDescription] = useState("");

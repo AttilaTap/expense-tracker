@@ -1,5 +1,5 @@
 import { GoogleLogin } from "@react-oauth/google";
-import axios from "./axiosInstance";
+import axios from "../axiosInstance";
 
 function GoogleLoginButton({ onLoginSuccess }) {
   const handleSuccess = async (credentialResponse) => {

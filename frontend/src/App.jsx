@@ -1,12 +1,15 @@
-import TransactionList from "./TransactionList";
-import CreateTransaction from "./CreateTransaction";
-import CreateCategory from "./CreateCategory";
-import Login from "./Login";
+import TransactionList from "./components/TransactionList";
+import CreateTransaction from "./components/CreateTransaction";
+import CreateCategory from "./components/CreateCategory";
+import CategoryManager from "./components/CategoryManager";
+import Login from "./components/Login";
+import FilterBar from "./components/FilterBar";
 import { useState, useEffect } from "react";
 
 function App() {
   const [refresh, setRefresh] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [filters, setFilters] = useState({ category: ""});
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -17,6 +20,10 @@ function App() {
 
   const handleRefresh = () => {
     setRefresh(!refresh);
+  };
+
+  const handleFilterChange = (category) => {
+    setFilters({ category });
   };
 
   function handleLoginSuccess() {
@@ -45,10 +52,12 @@ function App() {
         </button>
       </div>
 
+      <CategoryManager onCategoryUpdated={handleRefresh} />
+      <FilterBar onFilterChange={handleFilterChange} refresh={refresh} />
       <CreateCategory onCategoryCreated={handleRefresh} />
       <CreateTransaction onTransactionCreated={handleRefresh} refresh={refresh} />
       <hr />
-      <TransactionList key={refresh} />
+      <TransactionList filters={filters} key={refresh} />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "./axiosInstance";
+import axios from "../axiosInstance";
 
 function CreateCategory({ onCategoryCreated }) {
   const [name, setName] = useState("");
@@ -16,7 +16,7 @@ function CreateCategory({ onCategoryCreated }) {
   
       setName("");
       if (onCategoryCreated) {
-        onCategoryCreated();
+        await onCategoryCreated();
       }
     } catch (error) {
       console.error("Error creating category:", error);
