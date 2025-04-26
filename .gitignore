@@ -1,11 +1,37 @@
-cat > .gitignore <<EOF
-# .NET
-**/bin/
-**/obj/
+# ------------------------
+# Frontend (React + Node)
+# ------------------------
+frontend/node_modules/
+frontend/.env
+frontend/dist/
+frontend/.next/
+frontend/out/
 
-# Node
-node_modules/
-dist/
-EOF
-
+# ------------------------
+# Backend (.NET Core)
+# ------------------------
+backend/bin/
+backend/obj/
 backend/appsettings.json
+backend/appsettings.Development.json
+
+# ------------------------
+# Global ignores
+# ------------------------
+*.log
+*.tmp
+*.temp
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code settings
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Docker
+docker-compose.override.yml
