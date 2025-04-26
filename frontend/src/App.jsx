@@ -4,6 +4,7 @@ import CreateCategory from "./components/CreateCategory";
 import CategoryManager from "./components/CategoryManager";
 import Login from "./components/Login";
 import FilterBar from "./components/FilterBar";
+import ExpensePieChart from "./components/ExpensePieChart";
 import { useState, useEffect } from "react";
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
 
       <CategoryManager onCategoryUpdated={handleRefresh} />
       <FilterBar onFilterChange={handleFilterChange} refresh={refresh} />
+      <ExpensePieChart refresh={refresh} />
       <CreateCategory onCategoryCreated={handleRefresh} />
       <CreateTransaction onTransactionCreated={handleRefresh} refresh={refresh} />
       <hr />
