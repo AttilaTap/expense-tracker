@@ -16,14 +16,12 @@ function ExpensePieChart({ refresh }) {
       const response = await axios.get("/transactions");
       const transactions = response.data;
 
-      // Group by category
       const categoryTotals = {};
       for (const transaction of transactions) {
         const categoryName = transaction.category?.name || "Uncategorized";
         categoryTotals[categoryName] = (categoryTotals[categoryName] || 0) + transaction.amount;
       }
 
-      // Format for recharts
       const formattedData = Object.keys(categoryTotals).map((key) => ({
         name: key,
         value: categoryTotals[key],
@@ -36,31 +34,56 @@ function ExpensePieChart({ refresh }) {
   };
 
   if (data.length === 0) {
-    return <p>No transactions to display chart.</p>;
+    return (
+      <div style={styles.card}>
+        <h2 style={styles.title}>Expenses Overview</h2>
+        <p>No transactions to display chart.</p>
+      </div>
+    );
   }
 
   return (
-    <div style={{ width: "100%", height: 300, marginBottom: "30px" }}>
-      <ResponsiveContainer>
-        <PieChart>
-          <Pie
-            data={data}
-            dataKey="value"
-            nameKey="name"
-            outerRadius={100}
-            fill="#8884d8"
-            label
-          >
-            {data.map((entry, index) => (
-              <Cell key={index} fill={COLORS[index % COLORS.length]} />
-            ))}
-          </Pie>
-          <Tooltip />
-          <Legend />
-        </PieChart>
-      </ResponsiveContainer>
+    <div style={styles.card}>
+      <h2 style={styles.title}>Expenses Overview</h2>
+      <div style={{ width: "100%", height: 300 }}>
+        <ResponsiveContainer>
+          <PieChart>
+            <Pie
+              data={data}
+              dataKey="value"
+              nameKey="name"
+              outerRadius={100}
+              fill="#8884d8"
+              label
+            >
+              {data.map((entry, index) => (
+                <Cell key={index} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip />
+            <Legend verticalAlign="bottom" height={36} />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 }
+
+const styles = {
+  card: {
+    background: "#fff",
+    padding: "20px",
+    borderRadius: "12px",
+    boxShadow: "0 2px 12px rgba(0,0,0,0.1)",
+    marginBottom: "30px",
+    textAlign: "center",
+  },
+  title: {
+    marginBottom: "20px",
+    fontSize: "20px",
+    fontWeight: "bold",
+    color: "#333",
+  },
+};
 
 export default ExpensePieChart;

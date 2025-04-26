@@ -52,50 +52,56 @@ function Login({ onLoginSuccess }) {
 
   return (
     <GoogleOAuthProvider clientId={clientId || "dummy"}>
-      <div style={{ maxWidth: "400px", margin: "0 auto", padding: "20px" }}>
-        <h2 style={{ textAlign: "center" }}>{isRegistering ? "Sign Up" : "Login"}</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-            autoComplete="username"
-            style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            autoComplete={isRegistering ? "new-password" : "current-password"}
-            style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
-          />
-          <button
-            type="submit"
-            style={{ width: "100%", padding: "10px", backgroundColor: "#4CAF50", color: "white", border: "none", borderRadius: "5px" }}
-            disabled={loading}
-          >
-            {loading ? "Please wait..." : isRegistering ? "Sign Up" : "Login"}
-          </button>
-        </form>
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+          <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
+            {isRegistering ? "Sign Up" : "Login"}
+          </h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              autoComplete="username"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              autoComplete={isRegistering ? "new-password" : "current-password"}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+            <button
+              type="submit"
+              disabled={loading}
+              className={`w-full py-2 rounded-md text-white ${
+                loading ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"
+              } transition-colors`}
+            >
+              {loading ? "Please wait..." : isRegistering ? "Sign Up" : "Login"}
+            </button>
+          </form>
 
-        <p style={{ textAlign: "center", margin: "20px 0" }}>
-          {isRegistering ? "Already have an account?" : "Don't have an account?"}
-          <button
-            type="button"
-            onClick={() => setIsRegistering(!isRegistering)}
-            style={{ marginLeft: "10px", color: "#007bff", background: "none", border: "none", cursor: "pointer", textDecoration: "underline" }}
-          >
-            {isRegistering ? "Login" : "Sign Up"}
-          </button>
-        </p>
+          <p className="text-center text-gray-600 mt-4">
+            {isRegistering ? "Already have an account?" : "Don't have an account?"}{" "}
+            <button
+              type="button"
+              onClick={() => setIsRegistering(!isRegistering)}
+              className="text-blue-500 hover:underline ml-2"
+            >
+              {isRegistering ? "Login" : "Sign Up"}
+            </button>
+          </p>
 
-        <p style={{ textAlign: "center" }}>or</p>
+          <p className="text-center text-gray-500 my-4">or</p>
 
-        <GoogleLoginButton onLoginSuccess={onLoginSuccess} />
+          <GoogleLoginButton onLoginSuccess={onLoginSuccess} />
+        </div>
       </div>
     </GoogleOAuthProvider>
   );
