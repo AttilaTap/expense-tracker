@@ -52,11 +52,10 @@ function Login({ onLoginSuccess }) {
 
   return (
     <GoogleOAuthProvider clientId={clientId || "dummy"}>
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-          <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
-            {isRegistering ? "Sign Up" : "Login"}
-          </h2>
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <h1 className="text-4xl text-red-500">Hello Tailwind!</h1>
+        <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
+          <h2 className="text-3xl font-bold text-center mb-6">{isRegistering ? "Sign Up" : "Login"}</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <input
               type="text"
@@ -65,7 +64,7 @@ function Login({ onLoginSuccess }) {
               onChange={(e) => setUsername(e.target.value)}
               required
               autoComplete="username"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
             />
             <input
               type="password"
@@ -74,33 +73,39 @@ function Login({ onLoginSuccess }) {
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete={isRegistering ? "new-password" : "current-password"}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
             />
             <button
               type="submit"
               disabled={loading}
-              className={`w-full py-2 rounded-md text-white ${
-                loading ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"
-              } transition-colors`}
+              className="w-full py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-200"
             >
               {loading ? "Please wait..." : isRegistering ? "Sign Up" : "Login"}
             </button>
           </form>
 
-          <p className="text-center text-gray-600 mt-4">
-            {isRegistering ? "Already have an account?" : "Don't have an account?"}{" "}
-            <button
-              type="button"
-              onClick={() => setIsRegistering(!isRegistering)}
-              className="text-blue-500 hover:underline ml-2"
-            >
-              {isRegistering ? "Login" : "Sign Up"}
-            </button>
-          </p>
+          <div className="flex items-center justify-center mt-4">
+            <p className="text-sm">
+              {isRegistering ? "Already have an account?" : "Don't have an account?"}
+              <button
+                type="button"
+                onClick={() => setIsRegistering(!isRegistering)}
+                className="ml-2 text-blue-500 hover:underline"
+              >
+                {isRegistering ? "Login" : "Sign Up"}
+              </button>
+            </p>
+          </div>
 
-          <p className="text-center text-gray-500 my-4">or</p>
+          <div className="flex items-center my-6">
+            <hr className="flex-grow border-gray-300" />
+            <span className="mx-4 text-gray-400">or</span>
+            <hr className="flex-grow border-gray-300" />
+          </div>
 
-          <GoogleLoginButton onLoginSuccess={onLoginSuccess} />
+          <div className="flex justify-center">
+            <GoogleLoginButton onLoginSuccess={onLoginSuccess} />
+          </div>
         </div>
       </div>
     </GoogleOAuthProvider>
