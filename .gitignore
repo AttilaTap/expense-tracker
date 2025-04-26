@@ -1,0 +1,9 @@
+cat > .gitignore <<EOF
+# .NET
+**/bin/
+**/obj/
+
+# Node
+node_modules/
+dist/
+EOF
