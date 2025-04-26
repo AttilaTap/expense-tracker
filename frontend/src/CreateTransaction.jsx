@@ -45,31 +45,46 @@ function CreateTransaction({ onTransactionCreated }) {
     <form onSubmit={handleSubmit}>
       <h2>Add Transaction</h2>
       <input
-        type="text"
-        placeholder="Description"
+        style={{ marginBottom: "10px", width: "100%", padding: "8px" }}
+        type='text'
+        placeholder='Description'
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         required
       />
       <br />
       <input
-        type="number"
-        placeholder="Amount"
+        style={{ marginBottom: "10px", width: "100%", padding: "8px" }}
+        type='number'
+        placeholder='Amount'
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
         required
       />
       <br />
-      <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required>
-        <option value="">Select Category</option>
+      <select
+        style={{ marginBottom: "10px", width: "100%", padding: "8px" }}
+        value={categoryId}
+        onChange={(e) => setCategoryId(e.target.value)}
+        required
+      >
+        <option value=''>Select Category</option>
         {categories.map((cat) => (
-          <option key={cat.id} value={cat.id}>
+          <option
+            key={cat.id}
+            value={cat.id}
+          >
             {cat.name}
           </option>
         ))}
       </select>
       <br />
-      <button type="submit">Add Transaction</button>
+      <button
+        type='submit'
+        style={{ width: "100%", padding: "10px", backgroundColor: "#4CAF50", color: "white", border: "none", borderRadius: "5px" }}
+      >
+        Add Transaction
+      </button>
     </form>
   );
 }

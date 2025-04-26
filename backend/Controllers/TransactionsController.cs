@@ -32,5 +32,19 @@ namespace ExpenseTracker.Controllers
 
             return CreatedAtAction(nameof(GetTransactions), new { id = transaction.Id }, transaction);
         }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTransaction(int id)
+        {
+            var transaction = await _context.Transactions.FindAsync(id);
+            if (transaction == null)
+            {
+                return NotFound();
+            }
+
+            _context.Transactions.Remove(transaction);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }

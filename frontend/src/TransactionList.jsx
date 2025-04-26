@@ -17,6 +17,15 @@ function TransactionList() {
     }
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5251/api/transactions/${id}`);
+      fetchTransactions(); // Refresh after delete
+    } catch (error) {
+      console.error("Error deleting transaction:", error);
+    }
+  };
+
   return (
     <div>
       <h2>Transactions</h2>
@@ -27,6 +36,12 @@ function TransactionList() {
           {transactions.map((transaction) => (
             <li key={transaction.id}>
               {transaction.description} - {transaction.amount} € - {transaction.category?.name}
+              <button
+                onClick={() => handleDelete(transaction.id)}
+                style={{ marginLeft: "10px" }}
+              >
+                Delete
+              </button>
             </li>
           ))}
         </ul>
