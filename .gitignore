@@ -7,3 +7,5 @@ cat > .gitignore <<EOF
 node_modules/
 dist/
 EOF
+
+backend/appsettings.json
