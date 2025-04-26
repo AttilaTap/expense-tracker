@@ -35,7 +35,7 @@ function CreateTransaction({ onTransactionCreated }) {
       setAmount("");
       setCategoryId("");
 
-      onTransactionCreated(); // Notify parent to refresh the list
+      onTransactionCreated();
     } catch (error) {
       console.error("Error creating transaction:", error);
     }
