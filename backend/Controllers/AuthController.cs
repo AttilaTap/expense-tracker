@@ -94,5 +94,36 @@ namespace ExpenseTracker.Controllers
 
             return jwt;
         }
+        [HttpPost("google")]
+        public async Task<IActionResult> GoogleLogin([FromBody] GoogleTokenDto tokenDto)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jsonToken = tokenHandler.ReadJwtToken(tokenDto.Token);
+            var emailClaim = jsonToken.Claims.FirstOrDefault(c => c.Type == "email");
+
+            if (emailClaim == null)
+            {
+                return BadRequest("Invalid Google token");
+            }
+
+            var username = emailClaim.Value;
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+            if (user == null)
+            {
+                user = new User
+                {
+                    Username = username,
+                    PasswordHash = new byte[0],
+                    PasswordSalt = new byte[0],
+                };
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+            }
+
+            string token = CreateToken(user);
+
+            return Ok(new { token });
+        }
     }
 }

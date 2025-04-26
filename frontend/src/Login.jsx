@@ -1,6 +1,9 @@
 import { useState } from "react";
-import axios from "axios";
+import axios from "./axiosInstance";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import GoogleLoginButton from "./GoogleLoginButton";
 
+const clientId = "876142938622-qf0d3sne0k83vgfempdruk7qhdnsck5r.apps.googleusercontent.com";
 function Login({ onLoginSuccess }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -8,7 +11,7 @@ function Login({ onLoginSuccess }) {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5251/api/auth/login", null, {
+      const response = await axios.post("/auth/login", null, {
         params: { username, password },
       });
 
@@ -25,26 +28,32 @@ function Login({ onLoginSuccess }) {
   }
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Login</button>
-      </form>
-    </div>
+    <GoogleOAuthProvider clientId={clientId}>
+      <div>
+        <h2>Login</h2>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit">Login</button>
+        </form>
+
+        <p>or</p>
+
+        <GoogleLoginButton onLoginSuccess={onLoginSuccess} />
+      </div>
+    </GoogleOAuthProvider>
   );
 }
 
