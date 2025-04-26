@@ -3,12 +3,22 @@ import axios from "./axiosInstance";
 
 function GoogleLoginButton({ onLoginSuccess }) {
   const handleSuccess = async (credentialResponse) => {
-    const { credential } = credentialResponse;
+    const credential = credentialResponse?.credential;
+
+    if (!credential) {
+      console.error("Google credential missing");
+      alert("Google login failed. Please try again.");
+      return;
+    }
+
     try {
       const response = await axios.post("/auth/google", { token: credential });
 
       const jwtToken = response.data.token;
+      const userId = response.data.userId;
+
       localStorage.setItem("token", jwtToken);
+      localStorage.setItem("userId", userId);
 
       if (onLoginSuccess) {
         onLoginSuccess();

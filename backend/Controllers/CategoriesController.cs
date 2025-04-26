@@ -16,20 +16,33 @@ namespace ExpenseTracker.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<IEnumerable<Category>>> GetCategories(int userId)
         {
-            return await _context.Categories.ToListAsync();
+            var categories = await _context.Categories
+                .Where(c => c.UserId == userId)
+                .ToListAsync();
+            return categories;
         }
 
         [HttpPost]
         public async Task<ActionResult<Category>> CreateCategory(Category category)
         {
+            var existingCategory = await _context.Categories
+                .Where(c => c.UserId == category.UserId)
+                .FirstOrDefaultAsync(c => c.Name.ToLower() == category.Name.ToLower());
+
+            if (existingCategory != null)
+            {
+                return BadRequest("Category with this name already exists.");
+            }
+
             _context.Categories.Add(category);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetCategories), new { id = category.Id }, category);
+            return CreatedAtAction(nameof(GetCategories), new { userId = category.UserId }, category);
         }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {

@@ -3,7 +3,12 @@ import axios from "./axiosInstance";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import GoogleLoginButton from "./GoogleLoginButton";
 
-const clientId = "876142938622-qf0d3sne0k83vgfempdruk7qhdnsck5r.apps.googleusercontent.com";
+const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+if (!clientId) {
+    console.error("Google Client ID is missing! Please check your .env file.");
+  }
+
 function Login({ onLoginSuccess }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -15,8 +20,10 @@ function Login({ onLoginSuccess }) {
         params: { username, password },
       });
 
-      const token = response.data.token;
+      const { token, userId } = response.data;
+
       localStorage.setItem("token", token);
+      localStorage.setItem("userId", userId);
 
       if (onLoginSuccess) {
         onLoginSuccess();
@@ -28,8 +35,8 @@ function Login({ onLoginSuccess }) {
   }
 
   return (
-    <GoogleOAuthProvider clientId={clientId}>
-      <div>
+    <GoogleOAuthProvider clientId={clientId || "dummy"}>
+      <div style={{ maxWidth: "400px", margin: "0 auto", padding: "20px" }}>
         <h2>Login</h2>
         <form onSubmit={handleSubmit}>
           <input
@@ -38,6 +45,8 @@ function Login({ onLoginSuccess }) {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
+            autoComplete="username"
+            style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
           />
           <input
             type="password"
@@ -45,11 +54,18 @@ function Login({ onLoginSuccess }) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            autoComplete="current-password"
+            style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
           />
-          <button type="submit">Login</button>
+          <button
+            type="submit"
+            style={{ width: "100%", padding: "10px", backgroundColor: "#4CAF50", color: "white", border: "none", borderRadius: "5px" }}
+          >
+            Login
+          </button>
         </form>
 
-        <p>or</p>
+        <p style={{ textAlign: "center", margin: "20px 0" }}>or</p>
 
         <GoogleLoginButton onLoginSuccess={onLoginSuccess} />
       </div>

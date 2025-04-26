@@ -2,6 +2,6 @@ namespace ExpenseTracker.Models
 {
     public class GoogleTokenDto
     {
-        public string Token { get; set; }
+        public required string Token { get; set; }
     }
 }

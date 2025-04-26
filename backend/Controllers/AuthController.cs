@@ -56,7 +56,7 @@ namespace ExpenseTracker.Controllers
 
             string token = CreateToken(user);
 
-            return Ok(new { token });
+            return Ok(new { token, userId = user.Id });
         }
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
@@ -76,9 +76,10 @@ namespace ExpenseTracker.Controllers
         private string CreateToken(User user)
         {
             var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.Username)
-            };
+    {
+        new Claim(ClaimTypes.Name, user.Username),
+        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+    };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
                 _configuration.GetSection("Jwt:Key").Value!));
@@ -123,7 +124,7 @@ namespace ExpenseTracker.Controllers
 
             string token = CreateToken(user);
 
-            return Ok(new { token });
+            return Ok(new { token, userId = user.Id });
         }
     }
 }

@@ -1,5 +1,6 @@
 import TransactionList from "./TransactionList";
 import CreateTransaction from "./CreateTransaction";
+import CreateCategory from "./CreateCategory";
 import Login from "./Login";
 import { useState, useEffect } from "react";
 
@@ -14,8 +15,8 @@ function App() {
     }
   }, []);
 
-  const handleTransactionCreated = () => {
-    setRefresh(!refresh); // Trigger re-fetch
+  const handleRefresh = () => {
+    setRefresh(!refresh);
   };
 
   function handleLoginSuccess() {
@@ -43,7 +44,9 @@ function App() {
           Logout
         </button>
       </div>
-      <CreateTransaction onTransactionCreated={handleTransactionCreated} />
+
+      <CreateCategory onCategoryCreated={handleRefresh} />
+      <CreateTransaction onTransactionCreated={handleRefresh} refresh={refresh} />
       <hr />
       <TransactionList key={refresh} />
     </div>
