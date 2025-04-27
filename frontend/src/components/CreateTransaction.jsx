@@ -53,9 +53,9 @@ function CreateTransaction({ onTransactionCreated, refresh }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className='bg-white p-6 rounded-xl shadow-md space-y-4'
+      className='bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md space-y-4 transition-colors'
     >
-      <h2 className='text-2xl font-bold text-gray-800'>Add Transaction</h2>
+      <h2 className='text-2xl font-bold text-gray-800 dark:text-gray-100'>Add Transaction</h2>
 
       <input
         type='text'
@@ -63,7 +63,7 @@ function CreateTransaction({ onTransactionCreated, refresh }) {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         required
-        className='w-full pr-40 pl-4 py-2  border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none'
+        className='w-full pr-40 pl-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none dark:bg-gray-700 dark:text-white dark:border-gray-600'
       />
 
       <input
@@ -72,14 +72,14 @@ function CreateTransaction({ onTransactionCreated, refresh }) {
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
         required
-        className='w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none'
+        className='w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none dark:bg-gray-700 dark:text-white dark:border-gray-600'
       />
 
       <select
         value={categoryId}
         onChange={(e) => setCategoryId(e.target.value)}
         required
-        className='w-full px-4 py-2 border rounded-md bg-white focus:ring-2 focus:ring-blue-400 focus:outline-none'
+        className='w-full px-4 py-2 border rounded-md bg-white dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:ring-2 focus:ring-blue-400 focus:outline-none'
       >
         <option value=''>Select Category</option>
         {categories.map((cat) => (

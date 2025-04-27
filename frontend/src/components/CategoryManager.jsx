@@ -45,14 +45,14 @@ function CategoryManager({ onCategoryUpdated }) {
   };
 
   return (
-    <div className='p-6 mt-4 space-y-4'>
-      <h2 className='text-2xl font-bold text-gray-800'>Manage Categories</h2>
+    <div className='py-4 mt-4 space-y-4 bg-white dark:bg-gray-800 transition-colors'>
+      <h2 className='text-2xl font-bold text-gray-800 dark:text-gray-100'>Manage Categories</h2>
 
       <div className='flex gap-4'>
         <select
           value={selectedCategoryId}
           onChange={(e) => setSelectedCategoryId(e.target.value)}
-          className='flex-grow px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none'
+          className='flex-grow px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none dark:bg-gray-700 dark:text-white dark:border-gray-600'
         >
           <option value=''>Select Category</option>
           {categories.map((cat) => (
@@ -67,7 +67,7 @@ function CategoryManager({ onCategoryUpdated }) {
 
         <button
           onClick={handleDeleteCategory}
-          className='px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition'
+          className='px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition'
         >
           Delete
         </button>

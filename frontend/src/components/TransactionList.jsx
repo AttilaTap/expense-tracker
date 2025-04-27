@@ -46,17 +46,17 @@ function TransactionList({ filters = {}, onRefresh }) {
   return (
     <div>
       {filteredTransactions.length === 0 ? (
-        <p className='text-gray-600'>No transactions yet.</p>
+        <p className='text-gray-600 dark:text-gray-300'>No transactions yet.</p>
       ) : (
         <ul className='space-y-4'>
           {filteredTransactions.map((transaction) => (
             <li
               key={transaction.id}
-              className='bg-white p-4 rounded-lg shadow-md flex justify-between items-center'
+              className='bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md flex justify-between items-center transition-colors'
             >
               <div className='text-left'>
-                <div className='font-semibold text-lg'>{transaction.description}</div>
-                <div className='text-gray-500 text-sm'>
+                <div className='font-semibold text-lg text-gray-800 dark:text-gray-100'>{transaction.description}</div>
+                <div className='text-gray-500 dark:text-gray-400 text-sm'>
                   {transaction.amount} € {transaction.category?.name ? `- ${transaction.category.name}` : "- No Category"}
                 </div>
               </div>

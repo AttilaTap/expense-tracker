@@ -24,13 +24,13 @@ function FilterBar({ onFilterChange, refresh }) {
   };
 
   return (
-    <div className='space-y-4'>
-      <h2 className='text-2xl font-bold text-gray-800'>Filter Transactions</h2>
+    <div className='space-y-4 bg-white dark:bg-gray-800 transition-colors'>
+      <h2 className='text-2xl font-bold text-gray-800 dark:text-gray-100'>Filter Transactions</h2>
 
       <select
         value={selectedCategory}
         onChange={handleCategoryChange}
-        className='w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none'
+        className='w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none dark:bg-gray-700 dark:text-white dark:border-gray-600'
       >
         <option value=''>All Categories</option>
         {categories.map((cat) => (
