@@ -28,38 +28,38 @@ jobs:
           --health-retries=3
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Set up .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
 
-    - name: Restore solution
-      run: dotnet restore expense-tracker.sln
+      - name: Restore solution
+        run: dotnet restore expense-tracker.sln
 
-    - name: Build solution
-      run: dotnet build expense-tracker.sln --configuration Release
+      - name: Build solution
+        run: dotnet build expense-tracker.sln --configuration Release
 
-    - name: Test solution
-      run: dotnet test expense-tracker.sln --configuration Release
+      - name: Test solution
+        run: dotnet test expense-tracker.sln --configuration Release
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-    - name: Install frontend dependencies
-      run: |
-        cd frontend
-        npm install
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm install
 
-    - name: Build frontend
-      run: |
-        cd frontend
-        npm run build
+      - name: Build frontend
+        run: |
+          cd frontend
+          npm run build
 
-    - name: Build Docker Image
-      run: |
-        docker build -t expense-tracker-app .
+      - name: Build Docker Image
+        run: |
+          docker build -t expense-tracker-app -f backend/Dockerfile .
