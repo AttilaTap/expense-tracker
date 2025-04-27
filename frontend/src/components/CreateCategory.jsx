@@ -15,8 +15,11 @@ function CreateCategory({ onCategoryCreated }) {
       });
 
       setName("");
+
       if (onCategoryCreated) {
-        await onCategoryCreated();
+        setTimeout(() => {
+          onCategoryCreated();
+        }, 200);
       }
     } catch (error) {
       console.error("Error creating category:", error);
@@ -28,7 +31,6 @@ function CreateCategory({ onCategoryCreated }) {
       }
     }
   };
-
   return (
     <form
       onSubmit={handleSubmit}

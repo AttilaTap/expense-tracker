@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "../axiosInstance";
 
-function CategoryManager({ onCategoryUpdated }) {
+function CategoryManager({ onCategoryUpdated, refresh }) {
   const [categories, setCategories] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
 
   useEffect(() => {
     fetchCategories();
-  }, []);
+  }, [refresh]);
 
   const fetchCategories = async () => {
     try {
@@ -34,7 +34,6 @@ function CategoryManager({ onCategoryUpdated }) {
       await axios.delete(`/categories/${selectedCategoryId}`);
       alert("Category deleted successfully!");
       setSelectedCategoryId("");
-      fetchCategories();
       if (onCategoryUpdated) {
         onCategoryUpdated();
       }
@@ -50,6 +49,7 @@ function CategoryManager({ onCategoryUpdated }) {
 
       <div className='flex gap-4'>
         <select
+          key={refresh}
           value={selectedCategoryId}
           onChange={(e) => setSelectedCategoryId(e.target.value)}
           className='flex-grow px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none dark:bg-gray-700 dark:text-white dark:border-gray-600'

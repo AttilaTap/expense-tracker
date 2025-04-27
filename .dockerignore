@@ -1,0 +1,33 @@
+# Ignore node_modules
+frontend/node_modules
+backend/bin
+backend/obj
+
+# Ignore local environment files
+*.env
+
+# Ignore build outputs
+frontend/dist
+backend/wwwroot/frontend
+
+# Ignore logs
+*.log
+
+# Ignore IDE files
+.vscode
+.idea
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Ignore Git stuff
+.git
+.gitignore
+
+# Ignore Docker-related cache
+**/.dockerignore
+.docker/
+Dockerfile
+docker-compose.yml
+docker-compose.override.yml

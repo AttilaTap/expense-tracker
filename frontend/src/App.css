@@ -9,7 +9,7 @@ html, body, #root {
 /* GLOBAL BACKGROUND */
 body {
   background: linear-gradient(to bottom, #38b2ac, #319795);
-  min-height: 100vh;
+  min-height: 120vh;
 }
 
 /* Existing styles */

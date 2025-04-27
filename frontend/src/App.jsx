@@ -21,7 +21,7 @@ function App() {
   }, []);
 
   const handleRefresh = () => {
-    setRefresh(!refresh);
+    setRefresh(prev => !prev);
   };
 
   const handleFilterChange = (category) => {
@@ -47,7 +47,7 @@ function App() {
 
   return (
     <div className={`${darkMode ? "dark" : ""} min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors`}>
-      <div className={`${darkMode ? "bg-teal-800" : "bg-teal-400"} transition-colors duration-500`}>
+      <div className={`${darkMode ? "bg-teal-800" : "bg-teal-400"} min-h-screen transition-colors duration-500`}>
         <div className='max-w-7xl mx-auto p-6'>
           <div className='flex justify-between items-center mb-8'>
             <h1 className='text-3xl text-gray-700 dark:text-gray-300 font-bold'>Expense Tracker</h1>
@@ -80,7 +80,7 @@ function App() {
             {/* LEFT SIDE */}
             <div className='flex-1 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md transition'>
               <ExpensePieChart refresh={refresh} />
-              <CategoryManager onCategoryUpdated={handleRefresh} />
+              <CategoryManager onCategoryUpdated={handleRefresh} refresh={refresh} />
             </div>
 
             {/* RIGHT SIDE */}
