@@ -45,42 +45,51 @@ function App() {
   }
 
   return (
-    <div className='max-w-5xl mx-auto my-10 p-6 bg-gray-50 rounded-2xl shadow-md space-y-8'>
-      <div className='flex justify-between items-center'>
-        <h1 className='text-4xl font-bold text-gray-800'>Expense Tracker</h1>
+    <div className='max-w-7xl mx-auto p-6'>
+      <div className='flex justify-between items-center mb-8'>
+        <h1 className='text-3xl font-bold'>Expense Tracker</h1>
         <button
           onClick={handleLogout}
-          className='p-2 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-md transition'
+          className='py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-md'
         >
           Logout
         </button>
       </div>
 
-      <ExpensePieChart refresh={refresh} />
+      <div className='flex flex-col md:flex-row gap-6'>
+        {/* LEFT SIDE */}
+        <div className='flex-1 bg-white p-6 rounded-2xl shadow-md'>
+          <ExpensePieChart refresh={refresh} />
+          <div className='mt-6'>
+            <CategoryManager onCategoryUpdated={handleRefresh} />
+          </div>
+        </div>
 
-      <div className='grid md:grid-cols-2 gap-6'>
-        <CreateCategory onCategoryCreated={handleRefresh} />
-
-        <CreateTransaction
-          onTransactionCreated={handleRefresh}
-          refresh={refresh}
-        />
+        {/* RIGHT SIDE */}
+        <div className='flex-1 bg-white p-6 rounded-2xl shadow-md'>
+          <FilterBar
+            onFilterChange={handleFilterChange}
+            refresh={refresh}
+          />
+          <TransactionList
+            filters={filters}
+            key={refresh}
+            onRefresh={handleRefresh}
+          />
+        </div>
       </div>
 
-      <CategoryManager onCategoryUpdated={handleRefresh} />
+      <div className='mt-10 flex flex-col md:flex-row gap-6'>
+  {/* LEFT SIDE: Create Category */}
+  <div className='flex-1 bg-white p-6 rounded-2xl shadow-md'>
+    <CreateCategory onCategoryCreated={handleRefresh} />
+  </div>
 
-      <FilterBar
-        onFilterChange={handleFilterChange}
-        refresh={refresh}
-      />
-
-      <div className='bg-white p-2 rounded-2xl shadow'>
-        <TransactionList
-          filters={filters}
-          key={refresh}
-          onRefresh={handleRefresh}
-        />
-      </div>
+  {/* RIGHT SIDE: Create Transaction */}
+  <div className='flex-1 bg-white p-6 rounded-2xl shadow-md'>
+    <CreateTransaction onTransactionCreated={handleRefresh} refresh={refresh} />
+  </div>
+</div>
     </div>
   );
 }
