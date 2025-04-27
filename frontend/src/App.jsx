@@ -38,55 +38,49 @@ function App() {
 
   if (!isAuthenticated) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-teal-400 to-teal-600">
+      <div className='flex items-center justify-center min-h-screen bg-gradient-to-b from-teal-400 to-teal-600'>
         <Login onLoginSuccess={handleLoginSuccess} />
       </div>
     );
   }
 
   return (
-    <div className="max-w-5xl mx-auto my-10 p-6 bg-gray-50 rounded-2xl shadow-md space-y-8">
-    <div className="flex justify-between items-center">
-      <h1 className="text-4xl font-bold text-gray-800">Expense Tracker</h1>
-      <button
-        onClick={handleLogout}
-        className="p-2 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-md transition"
-      >
-        Logout
-      </button>
-    </div>
-  
-    {/* PIE CHART */}
-    <div className="bg-white p-6 rounded-2xl shadow">
+    <div className='max-w-5xl mx-auto my-10 p-6 bg-gray-50 rounded-2xl shadow-md space-y-8'>
+      <div className='flex justify-between items-center'>
+        <h1 className='text-4xl font-bold text-gray-800'>Expense Tracker</h1>
+        <button
+          onClick={handleLogout}
+          className='p-2 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-md transition'
+        >
+          Logout
+        </button>
+      </div>
+
       <ExpensePieChart refresh={refresh} />
-    </div>
-  
-    {/* CATEGORY MANAGER */}
-    <div className="bg-white p-6 rounded-2xl shadow">
-      <CategoryManager onCategoryUpdated={handleRefresh} />
-    </div>
-  
-    {/* FILTER BAR */}
-    <div className="bg-white p-6 rounded-2xl shadow">
-      <FilterBar onFilterChange={handleFilterChange} refresh={refresh} />
-    </div>
-  
-    {/* CREATE FORMS */}
-    <div className="grid md:grid-cols-2 gap-6">
-      <div className="bg-white p-6 rounded-2xl shadow">
+
+      <div className='grid md:grid-cols-2 gap-6'>
         <CreateCategory onCategoryCreated={handleRefresh} />
+
+        <CreateTransaction
+          onTransactionCreated={handleRefresh}
+          refresh={refresh}
+        />
       </div>
-      <div className="bg-white p-6 rounded-2xl shadow">
-        <CreateTransaction onTransactionCreated={handleRefresh} refresh={refresh} />
+
+      <CategoryManager onCategoryUpdated={handleRefresh} />
+
+      <FilterBar
+        onFilterChange={handleFilterChange}
+        refresh={refresh}
+      />
+
+      <div className='bg-white p-2 rounded-2xl shadow'>
+        <TransactionList
+          filters={filters}
+          key={refresh}
+        />
       </div>
     </div>
-  
-    {/* TRANSACTION LIST */}
-    <div className="bg-white p-6 rounded-2xl shadow">
-      <TransactionList filters={filters} key={refresh} />
-    </div>
-  </div>
-  
   );
 }
 

@@ -24,11 +24,20 @@ function FilterBar({ onFilterChange, refresh }) {
   };
 
   return (
-    <div style={{ display: "flex", gap: "10px" }}>
-      <select value={selectedCategory} onChange={handleCategoryChange}>
-        <option value="">All Categories</option>
+    <div className='bg-white p-6 rounded-xl shadow-md mt-8 space-y-4'>
+      <h2 className='text-2xl font-bold text-gray-800'>Filter Transactions</h2>
+
+      <select
+        value={selectedCategory}
+        onChange={handleCategoryChange}
+        className='w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none'
+      >
+        <option value=''>All Categories</option>
         {categories.map((cat) => (
-          <option key={cat.id} value={cat.id}>
+          <option
+            key={cat.id}
+            value={cat.id}
+          >
             {cat.name}
           </option>
         ))}
