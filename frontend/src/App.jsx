@@ -56,40 +56,45 @@ function App() {
         </button>
       </div>
 
+      {/* Dashboard (Pie + Transactions) */}
       <div className='flex flex-col md:flex-row gap-6'>
         {/* LEFT SIDE */}
         <div className='flex-1 bg-white p-6 rounded-2xl shadow-md'>
           <ExpensePieChart refresh={refresh} />
-          <div className='mt-6'>
-            <CategoryManager onCategoryUpdated={handleRefresh} />
-          </div>
+
+          <CategoryManager onCategoryUpdated={handleRefresh} />
         </div>
 
         {/* RIGHT SIDE */}
-        <div className='flex-1 bg-white p-6 rounded-2xl shadow-md'>
+        <div className='flex-1 min-w-0 max-h-[600px] bg-white p-6 rounded-2xl shadow-md flex flex-col'>
           <FilterBar
             onFilterChange={handleFilterChange}
             refresh={refresh}
           />
-          <TransactionList
-            filters={filters}
-            key={refresh}
-            onRefresh={handleRefresh}
-          />
+
+          <h2 className='text-2xl font-bold mt-6 mb-4 text-left'>Transactions</h2>
+
+          <div className='flex-1 overflow-y-auto max-h-[400px] pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200'>
+            <TransactionList
+              filters={filters}
+              key={refresh}
+              onRefresh={handleRefresh}
+            />
+          </div>
         </div>
       </div>
 
-      <div className='mt-10 flex flex-col md:flex-row gap-6'>
-  {/* LEFT SIDE: Create Category */}
-  <div className='flex-1 bg-white p-6 rounded-2xl shadow-md'>
-    <CreateCategory onCategoryCreated={handleRefresh} />
-  </div>
+      {/* Create Category + Create Transaction Section */}
+      <div className='mt-6 flex flex-col md:flex-row gap-6'>
+        <CreateCategory onCategoryCreated={handleRefresh} />
 
-  {/* RIGHT SIDE: Create Transaction */}
-  <div className='flex-1 bg-white p-6 rounded-2xl shadow-md'>
-    <CreateTransaction onTransactionCreated={handleRefresh} refresh={refresh} />
-  </div>
-</div>
+        
+          <CreateTransaction
+            onTransactionCreated={handleRefresh}
+            refresh={refresh}
+          />
+        
+      </div>
     </div>
   );
 }

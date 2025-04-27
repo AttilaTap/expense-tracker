@@ -25,9 +25,7 @@ function CategoryManager({ onCategoryUpdated }) {
       return;
     }
 
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this category? All transactions linked to it will also be deleted!"
-    );
+    const confirmDelete = window.confirm("Are you sure you want to delete this category? All transactions linked to it will also be deleted!");
     if (!confirmDelete) {
       return;
     }
@@ -47,18 +45,21 @@ function CategoryManager({ onCategoryUpdated }) {
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-md space-y-4">
-      <h2 className="text-2xl font-bold text-gray-800">Manage Categories</h2>
-      
-      <div className="flex gap-4">
+    <div className='p-6 mt-4 space-y-4'>
+      <h2 className='text-2xl font-bold text-gray-800'>Manage Categories</h2>
+
+      <div className='flex gap-4'>
         <select
           value={selectedCategoryId}
           onChange={(e) => setSelectedCategoryId(e.target.value)}
-          className="flex-grow px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
+          className='flex-grow px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none'
         >
-          <option value="">Select Category</option>
+          <option value=''>Select Category</option>
           {categories.map((cat) => (
-            <option key={cat.id} value={cat.id}>
+            <option
+              key={cat.id}
+              value={cat.id}
+            >
               {cat.name}
             </option>
           ))}
@@ -66,7 +67,7 @@ function CategoryManager({ onCategoryUpdated }) {
 
         <button
           onClick={handleDeleteCategory}
-          className="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+          className='px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition'
         >
           Delete
         </button>

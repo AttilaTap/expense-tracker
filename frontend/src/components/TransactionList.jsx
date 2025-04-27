@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "../axiosInstance";
 
-function TransactionList({ filters = {}, onRefresh  }) {
+function TransactionList({ filters = {}, onRefresh }) {
   const [transactions, setTransactions] = useState([]);
   const [filteredTransactions, setFilteredTransactions] = useState([]);
 
@@ -45,7 +45,6 @@ function TransactionList({ filters = {}, onRefresh  }) {
 
   return (
     <div>
-      <h2 className='text-2xl font-semibold text-gray-800 p-4' >Transactions</h2>
       {filteredTransactions.length === 0 ? (
         <p className='text-gray-600'>No transactions yet.</p>
       ) : (
