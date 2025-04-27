@@ -11,6 +11,7 @@ function TransactionList({ filters = {}, onRefresh }) {
 
   useEffect(() => {
     applyFilters();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, transactions]);
 
   const fetchTransactions = async () => {
