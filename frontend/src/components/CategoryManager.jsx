@@ -25,7 +25,9 @@ function CategoryManager({ onCategoryUpdated }) {
       return;
     }
 
-    const confirmDelete = window.confirm("Are you sure you want to delete this category? All transactions linked to it will also be deleted!");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this category? All transactions linked to it will also be deleted!"
+    );
     if (!confirmDelete) {
       return;
     }
@@ -45,13 +47,14 @@ function CategoryManager({ onCategoryUpdated }) {
   };
 
   return (
-    <div style={{ marginBottom: "30px" }}>
-      <h2>Manage Categories</h2>
-      <div style={{ display: "flex", gap: "10px" }}>
+    <div className="bg-white p-6 rounded-xl shadow-md space-y-4">
+      <h2 className="text-2xl font-bold text-gray-800">Manage Categories</h2>
+      
+      <div className="flex gap-4">
         <select
           value={selectedCategoryId}
           onChange={(e) => setSelectedCategoryId(e.target.value)}
-          style={{ flexGrow: 1, padding: "8px" }}
+          className="flex-grow px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
         >
           <option value="">Select Category</option>
           {categories.map((cat) => (
@@ -63,7 +66,7 @@ function CategoryManager({ onCategoryUpdated }) {
 
         <button
           onClick={handleDeleteCategory}
-          style={{ padding: "8px 12px", backgroundColor: "#dc3545", color: "white", border: "none", borderRadius: "5px" }}
+          className="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
         >
           Delete
         </button>

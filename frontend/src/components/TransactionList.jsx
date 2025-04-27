@@ -25,11 +25,8 @@ function TransactionList({ filters = {} }) {
   const applyFilters = () => {
     let filtered = [...transactions];
 
-    // Only category filter now
     if (filters.category && filters.category !== "") {
-      filtered = filtered.filter((t) =>
-        t.category?.id === parseInt(filters.category)
-      );
+      filtered = filtered.filter((t) => t.category?.id === parseInt(filters.category));
     }
 
     setFilteredTransactions(filtered);
@@ -46,17 +43,25 @@ function TransactionList({ filters = {} }) {
 
   return (
     <div>
-      <h2>Transactions</h2>
+      <h2 className='text-2xl font-semibold text-gray-800 p-4' >Transactions</h2>
       {filteredTransactions.length === 0 ? (
-        <p>No transactions yet.</p>
+        <p className='text-gray-600'>No transactions yet.</p>
       ) : (
-        <ul>
+        <ul className='space-y-4'>
           {filteredTransactions.map((transaction) => (
-            <li key={transaction.id}>
-              {transaction.description} - {transaction.amount} € - {transaction.category?.name || "No Category"}
+            <li
+              key={transaction.id}
+              className='bg-white p-4 rounded-lg shadow-md flex justify-between items-center'
+            >
+              <div className='text-left'>
+                <div className='font-semibold text-lg'>{transaction.description}</div>
+                <div className='text-gray-500 text-sm'>
+                  {transaction.amount} € {transaction.category?.name ? `- ${transaction.category.name}` : "- No Category"}
+                </div>
+              </div>
               <button
                 onClick={() => handleDelete(transaction.id)}
-                style={{ marginLeft: "10px" }}
+                className='px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition'
               >
                 Delete
               </button>

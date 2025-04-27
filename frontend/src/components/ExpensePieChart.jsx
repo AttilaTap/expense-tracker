@@ -75,7 +75,6 @@ const styles = {
     padding: "20px",
     borderRadius: "12px",
     boxShadow: "0 2px 12px rgba(0,0,0,0.1)",
-    marginBottom: "30px",
     textAlign: "center",
   },
   title: {

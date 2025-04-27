@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import TransactionList from "./components/TransactionList";
 import CreateTransaction from "./components/CreateTransaction";
 import CreateCategory from "./components/CreateCategory";
@@ -6,6 +5,7 @@ import CategoryManager from "./components/CategoryManager";
 import Login from "./components/Login";
 import FilterBar from "./components/FilterBar";
 import ExpensePieChart from "./components/ExpensePieChart";
+import { useState, useEffect } from "react";
 
 function App() {
   const [refresh, setRefresh] = useState(false);
@@ -27,47 +27,66 @@ function App() {
     setFilters({ category });
   };
 
-  function handleLoginSuccess() {
+  const handleLoginSuccess = () => {
     setIsAuthenticated(true);
-  }
+  };
 
-  function handleLogout() {
+  const handleLogout = () => {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
-  }
+  };
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-teal-400 to-teal-600">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-teal-400 to-teal-600">
         <Login onLoginSuccess={handleLoginSuccess} />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-400 to-teal-600 flex items-start justify-center p-6">
-      <div className="w-full max-w-3xl bg-white p-8 rounded-2xl shadow-2xl">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">Expense Tracker</h1>
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
-          >
-            Logout
-          </button>
-        </div>
-
-        <CategoryManager onCategoryUpdated={handleRefresh} />
-        <FilterBar onFilterChange={handleFilterChange} refresh={refresh} />
-        <ExpensePieChart refresh={refresh} />
+    <div className="max-w-5xl mx-auto my-10 p-6 bg-gray-50 rounded-2xl shadow-md space-y-8">
+    <div className="flex justify-between items-center">
+      <h1 className="text-4xl font-bold text-gray-800">Expense Tracker</h1>
+      <button
+        onClick={handleLogout}
+        className="p-2 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-md transition"
+      >
+        Logout
+      </button>
+    </div>
+  
+    {/* PIE CHART */}
+    <div className="bg-white p-6 rounded-2xl shadow">
+      <ExpensePieChart refresh={refresh} />
+    </div>
+  
+    {/* CATEGORY MANAGER */}
+    <div className="bg-white p-6 rounded-2xl shadow">
+      <CategoryManager onCategoryUpdated={handleRefresh} />
+    </div>
+  
+    {/* FILTER BAR */}
+    <div className="bg-white p-6 rounded-2xl shadow">
+      <FilterBar onFilterChange={handleFilterChange} refresh={refresh} />
+    </div>
+  
+    {/* CREATE FORMS */}
+    <div className="grid md:grid-cols-2 gap-6">
+      <div className="bg-white p-6 rounded-2xl shadow">
         <CreateCategory onCategoryCreated={handleRefresh} />
+      </div>
+      <div className="bg-white p-6 rounded-2xl shadow">
         <CreateTransaction onTransactionCreated={handleRefresh} refresh={refresh} />
-
-        <hr className="my-6" />
-
-        <TransactionList filters={filters} key={refresh} />
       </div>
     </div>
+  
+    {/* TRANSACTION LIST */}
+    <div className="bg-white p-6 rounded-2xl shadow">
+      <TransactionList filters={filters} key={refresh} />
+    </div>
+  </div>
+  
   );
 }
 

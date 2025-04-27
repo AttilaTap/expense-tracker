@@ -24,7 +24,7 @@ function FilterBar({ onFilterChange, refresh }) {
   };
 
   return (
-    <div style={{ marginBottom: "20px", display: "flex", gap: "10px" }}>
+    <div style={{ display: "flex", gap: "10px" }}>
       <select value={selectedCategory} onChange={handleCategoryChange}>
         <option value="">All Categories</option>
         {categories.map((cat) => (

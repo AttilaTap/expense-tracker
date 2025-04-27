@@ -18,7 +18,6 @@ function CreateTransaction({ onTransactionCreated, refresh }) {
       setCategories(response.data);
     } catch (error) {
       console.error("Error creating transaction:", error);
-    
       if (error.response && error.response.data) {
         alert(error.response.data);
       } else {
@@ -29,7 +28,7 @@ function CreateTransaction({ onTransactionCreated, refresh }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       await axios.post("/transactions", {
         description,
@@ -37,11 +36,11 @@ function CreateTransaction({ onTransactionCreated, refresh }) {
         date: new Date().toISOString(),
         categoryId: parseInt(categoryId),
       });
-  
+
       setDescription("");
       setAmount("");
       setCategoryId("");
-  
+
       if (onTransactionCreated) {
         onTransactionCreated();
       }
@@ -52,47 +51,50 @@ function CreateTransaction({ onTransactionCreated, refresh }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Add Transaction</h2>
+    <form
+      onSubmit={handleSubmit}
+      className='bg-white p-6 rounded-xl shadow-md space-y-4'
+    >
+      <h2 className='text-2xl font-bold text-gray-800'>Add Transaction</h2>
+
       <input
-        type="text"
-        placeholder="Description"
+        type='text'
+        placeholder='Description'
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         required
-        style={{ marginBottom: "10px", width: "100%", padding: "8px" }}
+        className='w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none'
       />
+
       <input
-        type="number"
-        placeholder="Amount"
+        type='number'
+        placeholder='Amount'
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
         required
-        style={{ marginBottom: "10px", width: "100%", padding: "8px" }}
+        className='w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none'
       />
+
       <select
         value={categoryId}
         onChange={(e) => setCategoryId(e.target.value)}
         required
-        style={{ marginBottom: "10px", width: "100%", padding: "8px" }}
+        className='w-full px-4 py-2 border rounded-md bg-white focus:ring-2 focus:ring-blue-400 focus:outline-none'
       >
-        <option value="">Select Category</option>
+        <option value=''>Select Category</option>
         {categories.map((cat) => (
-          <option key={cat.id} value={cat.id}>
+          <option
+            key={cat.id}
+            value={cat.id}
+          >
             {cat.name}
           </option>
         ))}
       </select>
+
       <button
-        type="submit"
-        style={{
-          width: "100%",
-          padding: "10px",
-          backgroundColor: "#4CAF50",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-        }}
+        type='submit'
+        className='w-full py-2 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 transition'
       >
         Add Transaction
       </button>
