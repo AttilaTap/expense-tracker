@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "../axiosInstance";
 
-function TransactionList({ filters = {} }) {
+function TransactionList({ filters = {}, onRefresh  }) {
   const [transactions, setTransactions] = useState([]);
   const [filteredTransactions, setFilteredTransactions] = useState([]);
 
@@ -35,7 +35,9 @@ function TransactionList({ filters = {} }) {
   const handleDelete = async (id) => {
     try {
       await axios.delete(`/transactions/${id}`);
-      fetchTransactions();
+      if (onRefresh) {
+        onRefresh();
+      }
     } catch (error) {
       console.error("Error deleting transaction:", error);
     }

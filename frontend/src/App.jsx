@@ -78,6 +78,7 @@ function App() {
         <TransactionList
           filters={filters}
           key={refresh}
+          onRefresh={handleRefresh}
         />
       </div>
     </div>
