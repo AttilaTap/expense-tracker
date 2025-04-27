@@ -51,7 +51,7 @@ function App() {
         <div className='flex justify-between items-center mb-8'>
           <h1 className='text-3xl font-bold'>Expense Tracker</h1>
           <div className='flex gap-4'>
-            <div className='flex items-center gap-4'>
+            <div className='flex items-center gap-2'>
               <span className='text-sm text-gray-700 dark:text-gray-300'>Light</span>
               <label className='relative inline-flex items-center cursor-pointer'>
                 <input
@@ -60,15 +60,11 @@ function App() {
                   onChange={() => setDarkMode(!darkMode)}
                   className='sr-only peer'
                 />
-                <div className='w-14 h-8 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-600 peer-checked:bg-blue-600 relative transition-all'>
-                  <div className='absolute top-1 left-1 w-6 h-6 bg-white rounded-full flex items-center justify-center text-xs transition-all transform peer-checked:translate-x-6'>
-                    {darkMode ? "🌙" : "☀️"}
-                  </div>
-                </div>
+                <div className='w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-600 peer-checked:bg-blue-600 transition-all'></div>
+                <div className='absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5'></div>
               </label>
               <span className='text-sm text-gray-700 dark:text-gray-300'>Dark</span>
             </div>
-
             <button
               onClick={handleLogout}
               className='py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-md transition'
