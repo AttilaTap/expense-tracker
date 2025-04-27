@@ -1,3 +1,4 @@
+import React from 'react';
 import { render, screen } from "@testing-library/react";
 import FilterBar from "../FilterBar";
 import { vi } from "vitest";

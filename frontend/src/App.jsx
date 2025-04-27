@@ -1,3 +1,4 @@
+import React from 'react';
 import TransactionList from "./components/TransactionList";
 import CreateTransaction from "./components/CreateTransaction";
 import CreateCategory from "./components/CreateCategory";
