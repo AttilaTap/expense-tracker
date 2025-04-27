@@ -42,7 +42,7 @@ jobs:
       - name: Build solution
         run: dotnet build expense-tracker.sln --configuration Release
 
-      - name: Test solution
+      - name: Test backend
         run: dotnet test expense-tracker.sln --configuration Release
 
       - name: Set up Node.js
@@ -59,6 +59,16 @@ jobs:
         run: |
           cd frontend
           npm run build
+
+      - name: Test frontend
+        run: |
+          cd frontend
+          npm run test
+
+      - name: Lint frontend
+        run: |
+          cd frontend
+          npm run lint
 
       - name: Build Docker Image
         run: |
