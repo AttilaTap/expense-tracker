@@ -63,7 +63,7 @@ function CreateTransaction({ onTransactionCreated, refresh }) {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         required
-        className='w-full px-8 py-2 mr-16 border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none'
+        className='w-full pr-40 pl-4 py-2  border rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none'
       />
 
       <input
