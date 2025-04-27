@@ -45,14 +45,14 @@ function ExpensePieChart({ refresh }) {
   return (
     <div className='bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md text-center transition-colors'>
       <h2 className='text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4'>Expenses Overview</h2>
-      <div className='w-full h-72'>
+      <div className='w-full h-80 '>
         <ResponsiveContainer>
           <PieChart>
             <Pie
               data={data}
               dataKey='value'
               nameKey='name'
-              outerRadius={100}
+              outerRadius={90}
               fill='#8884d8'
               label
             >
