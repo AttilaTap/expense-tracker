@@ -36,16 +36,24 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: Restore backend
-        run: dotnet restore expense-tracker.sln
-
-      - name: Build backend
-        run: dotnet build expense-tracker.sln --configuration Release
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose-plugin
+
+      - name: Restore .NET solution
+        run: dotnet restore expense-tracker.sln
+
+      - name: Build .NET solution
+        run: dotnet build expense-tracker.sln --configuration Release
+
+      - name: Test .NET backend
+        run: dotnet test expense-tracker.sln --configuration Release
 
       - name: Install frontend dependencies
         run: |
@@ -57,18 +65,23 @@ jobs:
           cd frontend
           npm run build
 
+      - name: Test frontend
+        run: |
+          cd frontend
+          npm run test
+
       - name: Lint frontend
         run: |
           cd frontend
           npm run lint
 
-      - name: Build and Run with Docker Compose
+      - name: Build and Run Docker Compose
         run: |
           docker-compose up --build -d
-          sleep 20  # wait for backend + db to fully start
+          echo "Waiting for services to become available..."
+          sleep 20
           curl --fail http://localhost:8080 || exit 1
 
       - name: Clean up Docker
         if: always()
-        run: |
-          docker-compose down
+        run: docker-compose down
