@@ -7,21 +7,40 @@ using ExpenseTracker.Data;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using MySqlConnector;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Database connection
 var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
-    mySqlOptions =>
+// Retry manually if MySQL is not ready yet
+var maxRetries = 10;
+var delay = TimeSpan.FromSeconds(5);
+bool dbConfigured = false;
+
+for (int i = 0; i < maxRetries && !dbConfigured; i++)
+{
+    try
     {
-        mySqlOptions.EnableRetryOnFailure(
-            maxRetryCount: 10,
-            maxRetryDelay: TimeSpan.FromSeconds(5),
-            errorNumbersToAdd: null);
-    }));
+        builder.Services.AddDbContext<AppDbContext>(options =>
+            options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
+            mySqlOptions =>
+            {
+                mySqlOptions.EnableRetryOnFailure(
+                    maxRetryCount: 10,
+                    maxRetryDelay: TimeSpan.FromSeconds(5),
+                    errorNumbersToAdd: null);
+            }));
+        dbConfigured = true;
+    }
+    catch (MySqlException)
+    {
+        if (i == maxRetries - 1) throw;
+        Console.WriteLine($"MySQL connection failed. Retrying ({i + 1}/{maxRetries})...");
+        Thread.Sleep(delay);
+    }
+}
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -78,6 +97,5 @@ using (var scope = app.Services.CreateScope())
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     dbContext.Database.Migrate();
 }
-
 
 app.Run();
