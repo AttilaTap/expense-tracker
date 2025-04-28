@@ -20,6 +20,7 @@ services:
       - '8080:8080'
     environment:
       DB_CONNECTION_STRING: 'server=expense-tracker-db;port=3306;database=expense_tracker_db;user=root;password=root1234'
+      ASPNETCORE_URLS: 'http://+:8080'
     depends_on:
       - expense-tracker-db
     networks:
