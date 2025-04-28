@@ -13,34 +13,45 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Database connection
 var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+Console.WriteLine($"Using connection string: {connectionString}");
 
-// Retry manually if MySQL is not ready yet
-var maxRetries = 10;
-var delay = TimeSpan.FromSeconds(5);
-bool dbConfigured = false;
+// Configure retry policy
+var maxRetries = 30; // Increase max retries
+var delay = TimeSpan.FromSeconds(2);
+var timeout = TimeSpan.FromMinutes(5); // Set a maximum timeout
+var startTime = DateTime.UtcNow;
 
-for (int i = 0; i < maxRetries && !dbConfigured; i++)
+while (DateTime.UtcNow - startTime < timeout)
 {
     try
     {
-        builder.Services.AddDbContext<AppDbContext>(options =>
-            options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
-            mySqlOptions =>
-            {
-                mySqlOptions.EnableRetryOnFailure(
-                    maxRetryCount: 10,
-                    maxRetryDelay: TimeSpan.FromSeconds(5),
-                    errorNumbersToAdd: null);
-            }));
-        dbConfigured = true;
+        using var connection = new MySqlConnection(connectionString);
+        connection.Open();
+        connection.Close();
+        Console.WriteLine("Successfully connected to the database.");
+        break;
     }
-    catch (MySqlException)
+    catch (MySqlException ex)
     {
-        if (i == maxRetries - 1) throw;
-        Console.WriteLine($"MySQL connection failed. Retrying ({i + 1}/{maxRetries})...");
+        if (DateTime.UtcNow - startTime + delay > timeout)
+        {
+            Console.WriteLine($"Failed to connect to the database after {timeout.TotalSeconds} seconds. Error: {ex.Message}");
+            throw;
+        }
+        Console.WriteLine($"Database connection attempt failed. Retrying in {delay.TotalSeconds} seconds...");
         Thread.Sleep(delay);
     }
 }
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
+    mySqlOptions =>
+    {
+        mySqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 10,
+            maxRetryDelay: TimeSpan.FromSeconds(5),
+            errorNumbersToAdd: null);
+    }));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
