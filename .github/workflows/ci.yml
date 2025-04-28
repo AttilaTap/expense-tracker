@@ -79,9 +79,20 @@ jobs:
       - name: Build and Run Docker Compose
         run: |
           docker-compose up --build -d
-          echo "Waiting for services to become available..."
-          sleep 20
-          curl --fail http://localhost:8080 || exit 1
+          echo "Waiting for backend to become available..."
+
+          tries=0
+          until curl --fail http://localhost:8080 || [ $tries -ge 10 ]; do
+            echo "Backend not available yet... retrying in 5 seconds..."
+            sleep 5
+            tries=$((tries+1))
+          done
+
+          if [ $tries -ge 10 ]; then
+            echo "Backend did not start in time. Failing the build."
+            docker-compose logs
+            exit 1
+          fi
 
       - name: Clean up Docker
         if: always()
