@@ -29,7 +29,7 @@ services:
       - expense-network
     entrypoint:
       [
-        '/wait-for-it.sh',
+        '/wait-for-it-curl.sh',
         'expense-tracker-db:3306',
         '--',
         'dotnet',
