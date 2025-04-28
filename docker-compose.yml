@@ -10,7 +10,6 @@ services:
       MYSQL_DATABASE: expense_tracker_db
     ports:
       - '3307:3306'
-    # Healthcheck so other services wait until MySQL is actually ready:
     healthcheck:
       test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-P', '3306']
       interval: 10s
@@ -28,7 +27,6 @@ services:
     ports:
       - '8080:8080'
     environment:
-      # point at the DB service name & default MySQL port (3306)
       DB_CONNECTION_STRING: 'server=expense-tracker-db;port=3306;database=expense_tracker_db;user=root;password=root1234'
       ASPNETCORE_ENVIRONMENT: Production
       Jwt__Key: 'THIS_IS_A_VERY_LONG_RANDOM_SECRET_KEY_FOR_JWT_SIGNING_1234567890'

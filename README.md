@@ -258,3 +258,124 @@ expense-tracker.sln # Solution file for .NET
 ```
 
 ---
+
+## 🔐 Authentication Setup
+
+### Google Authentication
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select an existing one
+3. Enable the Google+ API
+4. Go to Credentials > Create Credentials > OAuth Client ID
+5. Configure the OAuth consent screen:
+   - Add authorized domains
+   - Set application type to "Web application"
+   - Add authorized redirect URIs:
+     - For development: `http://localhost:8080/api/auth/google-callback`
+     - For production: `https://your-domain.com/api/auth/google-callback`
+6. Note your Client ID and Client Secret
+
+### Environment Configuration
+
+Create a `.env` file in the root directory:
+
+```env
+# Google OAuth
+GOOGLE_CLIENT_ID=your_client_id_here
+GOOGLE_CLIENT_SECRET=your_client_secret_here
+
+# JWT (generate a strong key for production!)
+JWT__KEY=your_jwt_key_here
+
+# Database (change these in production!)
+MYSQL_ROOT_PASSWORD=your_secure_password
+DB_CONNECTION_STRING=server=expense-tracker-db;port=3306;database=expense_tracker_db;user=root;password=your_secure_password
+```
+
+⚠️ **IMPORTANT: Never commit your `.env` file to version control!**
+
+## ⚠️ Security Considerations
+
+### This is a Hobby/Demo Project
+
+This project is intended for learning and demonstration purposes. While it implements basic security measures, it may not meet all requirements for a production environment.
+
+### Known Security Considerations:
+
+1. **Database Security:**
+
+   - Current setup uses MySQL root user (not recommended for production)
+   - Database password is exposed in docker-compose.yml
+   - Consider using:
+     - Dedicated database users with limited permissions
+     - Secure password management solutions
+     - Database encryption at rest
+
+2. **JWT Configuration:**
+
+   - JWT key is stored in environment variables
+   - In production, use:
+     - Secure key management services (e.g., Azure Key Vault, AWS KMS)
+     - Regular key rotation
+     - Longer, cryptographically secure keys
+
+3. **Google OAuth:**
+
+   - Restrict Google OAuth credentials to specific domains
+   - Regularly review OAuth consent screen settings
+   - Monitor OAuth usage for suspicious activities
+
+4. **Docker Security:**
+   - Current setup exposes database port (3307)
+   - In production:
+     - Limit exposed ports
+     - Use Docker secrets
+     - Implement container security scanning
+     - Regular security updates
+
+### Recommendations for Production Use:
+
+1. **Environment:**
+
+   - Use proper CI/CD secrets management
+   - Implement proper logging and monitoring
+   - Set up SSL/TLS certificates
+   - Use reverse proxy (e.g., Nginx)
+
+2. **Authentication:**
+
+   - Implement rate limiting
+   - Add MFA support
+   - Session management
+   - Password complexity requirements
+
+3. **Data Protection:**
+
+   - Implement data backup strategy
+   - Add audit logging
+   - Consider data encryption
+   - Implement proper data retention policies
+
+4. **Network:**
+   - Use private Docker networks
+   - Implement proper firewalls
+   - Regular security audits
+   - DDoS protection
+
+## 🔄 Updates and Maintenance
+
+This project is maintained on a best-effort basis. While we strive to:
+
+- Keep dependencies updated
+- Fix security vulnerabilities
+- Address major bugs
+
+We cannot guarantee:
+
+- Immediate security patches
+- Production-level support
+- Regular feature updates
+
+Please fork and enhance security measures as needed for your use case.
+
+---
