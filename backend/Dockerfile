@@ -23,6 +23,10 @@ RUN npm run build
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 
+# Copy wait-for-it script
+COPY wait-for-it.sh /wait-for-it.sh
+RUN chmod +x /wait-for-it.sh
+
 # Copy backend build
 COPY --from=build /publish .
 
@@ -32,4 +36,5 @@ COPY --from=frontend-build /frontend/dist ./wwwroot
 # Expose port
 EXPOSE 8080
 
-ENTRYPOINT ["dotnet", "backend.dll"]
+# DO NOT set ENTRYPOINT here.
+# It will be set in docker-compose.yml
