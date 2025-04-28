@@ -10,6 +10,13 @@ services:
       MYSQL_DATABASE: expense_tracker_db
     ports:
       - '3307:3306'
+    # Healthcheck so other services wait until MySQL is actually ready:
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-P', '3306']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     networks:
       - expense-network
 
@@ -21,20 +28,14 @@ services:
     ports:
       - '8080:8080'
     environment:
+      # point at the DB service name & default MySQL port (3306)
       DB_CONNECTION_STRING: 'server=expense-tracker-db;port=3306;database=expense_tracker_db;user=root;password=root1234'
-      ASPNETCORE_URLS: 'http://+:8080'
+      ASPNETCORE_ENVIRONMENT: Production
     depends_on:
-      - expense-tracker-db
+      expense-tracker-db:
+        condition: service_healthy
     networks:
       - expense-network
-    entrypoint:
-      [
-        '/wait-for-it-curl.sh',
-        'expense-tracker-db:3306',
-        '--',
-        'dotnet',
-        'backend.dll',
-      ]
 
 networks:
   expense-network:

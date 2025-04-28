@@ -1,44 +1,44 @@
-# Build stage for backend
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /app
-
-# Copy backend project file and restore dependencies
-COPY backend/*.csproj ./backend/
-RUN dotnet restore backend/*.csproj
-
-# Copy backend source code and publish
-COPY backend/ ./backend/
-RUN dotnet publish backend/*.csproj -c Release -o /publish
-
-# Build stage for frontend
-FROM node:20 AS frontend-build
-WORKDIR /frontend
-
-# Install frontend dependencies and build
-COPY frontend/package*.json ./
-RUN npm install
-COPY frontend/ ./
-RUN npm run build
-
-# Final runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
-WORKDIR /app
-
-# Install curl (if not already present)
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
-
-# Copy wait-for-it-curl.sh script
-COPY wait-for-it-curl.sh /wait-for-it-curl.sh
-RUN chmod +x /wait-for-it-curl.sh
-
-# Copy backend published output
-COPY --from=build /publish .
-
-# Copy frontend built static files into backend wwwroot
-COPY --from=frontend-build /frontend/dist ./wwwroot
-
-# Expose backend port
-EXPOSE 8080
-
-# Start backend after the database is available
-ENTRYPOINT ["/wait-for-it-curl.sh", "expense-tracker-db", "3306", "--", "dotnet", "backend.dll"]
+# --- Build frontend ---
+    FROM node:20 AS frontend-build
+    WORKDIR /frontend
+    
+    # Use frozen lockfile so installs are repeatable
+    COPY frontend/package*.json ./
+    RUN npm ci
+    
+    COPY frontend/ ./
+    RUN npm run build
+    
+    # --- Build backend ---
+    FROM mcr.microsoft.com/dotnet/sdk:8.0 AS backend-build
+    WORKDIR /src
+    
+    # Restore & publish
+    COPY backend/*.csproj ./backend/
+    RUN dotnet restore backend/backend.csproj
+    
+    COPY backend/. ./backend/
+    WORKDIR /src/backend
+    RUN dotnet publish -c Release -o /app
+    
+    # --- Final image ---
+    FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+    WORKDIR /app
+    
+    # Expose ASP.NET Core port
+    ENV ASPNETCORE_URLS=http://+:8080
+    EXPOSE 8080
+    
+    # Install only curl for simple health checks (if you need them)
+    RUN apt-get update \
+     && apt-get install -y --no-install-recommends curl \
+     && rm -rf /var/lib/apt/lists/*
+    
+    # Copy published backend
+    COPY --from=backend-build /app ./
+    
+    # Copy static frontend build into wwwroot
+    COPY --from=frontend-build /frontend/dist ./wwwroot
+    
+    ENTRYPOINT ["dotnet", "backend.dll"]
+    
