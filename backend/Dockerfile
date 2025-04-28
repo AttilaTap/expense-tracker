@@ -2,11 +2,11 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
-# Copy backend project
+# Copy backend project file and restore dependencies
 COPY backend/*.csproj ./backend/
 RUN dotnet restore backend/*.csproj
 
-# Copy backend source code
+# Copy backend source code and publish
 COPY backend/ ./backend/
 RUN dotnet publish backend/*.csproj -c Release -o /publish
 
@@ -14,27 +14,31 @@ RUN dotnet publish backend/*.csproj -c Release -o /publish
 FROM node:20 AS frontend-build
 WORKDIR /frontend
 
+# Install frontend dependencies and build
 COPY frontend/package*.json ./
 RUN npm install
 COPY frontend/ ./
 RUN npm run build
 
-# Final image
+# Final runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 
-# Copy wait-for-it script
-COPY wait-for-it.sh /wait-for-it.sh
-RUN chmod +x /wait-for-it.sh
+# Install curl (if not already present)
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
-# Copy backend build
+# Copy wait-for-it-curl.sh script
+COPY wait-for-it-curl.sh /wait-for-it-curl.sh
+RUN chmod +x /wait-for-it-curl.sh
+
+# Copy backend published output
 COPY --from=build /publish .
 
-# Copy frontend build into backend's wwwroot
+# Copy frontend built static files into backend wwwroot
 COPY --from=frontend-build /frontend/dist ./wwwroot
 
-# Expose port
+# Expose backend port
 EXPOSE 8080
 
-# DO NOT set ENTRYPOINT here.
-# It will be set in docker-compose.yml
+# Start backend after the database is available
+ENTRYPOINT ["/wait-for-it-curl.sh", "expense-tracker-db", "3306", "--", "dotnet", "backend.dll"]
