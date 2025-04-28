@@ -11,7 +11,7 @@ on:
 jobs:
   build-test:
     name: Build and Test Backend + Frontend
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     services:
       mysql:
