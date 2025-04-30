@@ -7,11 +7,41 @@ using ExpenseTracker.Data;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using MySqlConnector;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Database connection
 var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+Console.WriteLine($"Using connection string: {connectionString}");
+
+// Configure retry policy
+var maxRetries = 30; // Increase max retries
+var delay = TimeSpan.FromSeconds(2);
+var timeout = TimeSpan.FromMinutes(5); // Set a maximum timeout
+var startTime = DateTime.UtcNow;
+
+while (DateTime.UtcNow - startTime < timeout)
+{
+    try
+    {
+        using var connection = new MySqlConnection(connectionString);
+        connection.Open();
+        connection.Close();
+        Console.WriteLine("Successfully connected to the database.");
+        break;
+    }
+    catch (MySqlException ex)
+    {
+        if (DateTime.UtcNow - startTime + delay > timeout)
+        {
+            Console.WriteLine($"Failed to connect to the database after {timeout.TotalSeconds} seconds. Error: {ex.Message}");
+            throw;
+        }
+        Console.WriteLine($"Database connection attempt failed. Retrying in {delay.TotalSeconds} seconds...");
+        Thread.Sleep(delay);
+    }
+}
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
@@ -41,11 +71,11 @@ builder.Services.AddCors(options =>
 // JWT Authentication
 builder.Services.AddAuthentication("Bearer").AddJwtBearer(options =>
 {
+    var jwtKey = Environment.GetEnvironmentVariable("Jwt__Key") ?? throw new InvalidOperationException("JWT Key not found in environment variables");
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-            builder.Configuration.GetSection("Jwt:Key").Value!)),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
         ValidateIssuer = false,
         ValidateAudience = false
     };
@@ -78,6 +108,5 @@ using (var scope = app.Services.CreateScope())
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     dbContext.Database.Migrate();
 }
-
 
 app.Run();

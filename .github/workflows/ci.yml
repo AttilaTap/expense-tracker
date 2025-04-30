@@ -11,21 +11,7 @@ on:
 jobs:
   build-test:
     name: Build and Test Backend + Frontend
-    runs-on: ubuntu-latest
-
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root1234
-          MYSQL_DATABASE: expense_tracker_db
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping --silent"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout repository
@@ -36,19 +22,25 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: Restore solution
-        run: dotnet restore expense-tracker.sln
-
-      - name: Build solution
-        run: dotnet build expense-tracker.sln --configuration Release
-
-      - name: Test backend
-        run: dotnet test expense-tracker.sln --configuration Release
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+
+      - name: Install docker-compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/v2.27.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose version
+
+      - name: Restore .NET solution
+        run: dotnet restore expense-tracker.sln
+
+      - name: Build .NET solution
+        run: dotnet build expense-tracker.sln --configuration Release
+
+      - name: Test .NET backend
+        run: dotnet test expense-tracker.sln --configuration Release
 
       - name: Install frontend dependencies
         run: |
@@ -70,6 +62,22 @@ jobs:
           cd frontend
           npm run lint
 
-      - name: Build Docker Image
+      - name: Build and Run Docker Compose
         run: |
-          docker build -t expense-tracker-app -f backend/Dockerfile .
+          docker-compose up --build -d
+          echo "Waiting for backend to become available..."
+          for i in {1..15}; do
+            if curl --fail http://localhost:8080; then
+              echo "Backend is up!"
+              exit 0
+            fi
+            echo "Backend not available yet... retrying in 5 seconds..."
+            sleep 5
+          done
+          echo "Backend did not start in time. Failing the build."
+          docker-compose logs
+          exit 1
+
+      - name: Clean up Docker
+        if: always()
+        run: docker-compose down
