@@ -15,10 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
 Console.WriteLine($"Using connection string: {connectionString}");
 
-// Configure retry policy
-var maxRetries = 30; // Increase max retries
+// Retry policy
 var delay = TimeSpan.FromSeconds(2);
-var timeout = TimeSpan.FromMinutes(5); // Set a maximum timeout
+var timeout = TimeSpan.FromMinutes(5);
 var startTime = DateTime.UtcNow;
 
 while (DateTime.UtcNow - startTime < timeout)
