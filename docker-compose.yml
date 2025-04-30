@@ -13,4 +13,4 @@ services:
 
 networks:
   expense-network:
-    external: true
+    driver: bridge
